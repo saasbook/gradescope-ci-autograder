@@ -4,6 +4,7 @@
 # useful for keeping example code around.
 examples/
 
-# Autograder files:
+# Autograder files, including default zip names
+Archive.zip
 assignment.zip
 autograder/
