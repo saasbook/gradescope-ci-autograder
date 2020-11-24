@@ -24,13 +24,14 @@ apt-get install -y sqlite3 libsqlite3-dev nodejs build-essential patch zlib1g-de
 curl -sSL https://rvm.io/mpapis.asc | gpg --import -
 curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
 
-curl -sSL https://get.rvm.io | bash -s stable --rails
+curl -sSL https://get.rvm.io | bash -s stable
 
 set +o nounset
 source /etc/profile.d/rvm.sh
 source /usr/local/rvm/scripts/rvm
 
 rvm requirements
-
 rvm install 2.6.5
-gem install rails -v 5.2.4.4
+rvm use 2.6.5
+
+gem install rails -v 5.2.4.4 --no-ri --no-doc
