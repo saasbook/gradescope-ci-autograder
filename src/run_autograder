@@ -1,7 +1,10 @@
 echo "AUTOGRADER SCRIPT"
 
 # Always pull the src from github.
-git clone --max-depth=10 https://github.com/saasbook/gradescope-ci-autograder
+git clone --depth=1 --branch=master https://github.com/saasbook/gradescope-ci-autograder
 cp -r gradescope-ci-autograder/src/script/* script/
 
+mkdir -p results/
 ruby script/autograder.rb
+
+rm -rf gradescope-ci-autograder/
