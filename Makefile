@@ -7,15 +7,18 @@ ZIP  = zip
 
 FILES = $(wildcard src/spec/*) src/run_autograder src/setup.sh src/*
 
-default: all
-all: $(NAME).zip
+default := all
 
-$(NAME).zip: $(FILES)
-	$(ZIP) $@ src/*
+.PHONY: all
+all: clean $(NAME).zip
 
-.PHONY: uploas
+$(NAME).zip:
+	cd src; $(ZIP) $@ *
+	@mv src/$(NAME).zip ./
+
+.PHONY: upload
 upload:
-	gradescope build -ag $(NAME).zip $@
+	gradescope build -ag $(NAME).zip -c 208804 -a 868305
 
 .PHONY: test
 test: localenv
@@ -23,7 +26,7 @@ test: localenv
 	cd autograder && ./run_autograder
 	echo 'Done, check autograder/results/results.json for results'
 
-.PHONY: make_localenv
+.PHONY: localenv
 localenv: $(FILES)
 	@echo 'Setting up environment to look like Gradescope docker container...'
 	-rm -rf autograder
