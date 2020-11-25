@@ -5,6 +5,7 @@ FROM gradescope/auto-builds:latest
 # A bunch of Ubuntu deps
 RUN apt-add-repository -y ppa:rael-gc/rvm
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update
 RUN apt-get install software-properties-common
@@ -19,10 +20,6 @@ RUN apt-get install -y ruby
 RUN echo 'gem: --no-document' >> /etc/gemrc
 
 RUN gem update --system
-RUN gem install travis
-RUN gem install bundler -v 2.1.4
-# RUN bundle install --gemfile ~/.travis/travis-build/Gemfile
-# RUN bundler binstubs travis
 
 # rvm
 RUN mkdir ~/.gnupg
@@ -30,6 +27,11 @@ RUN echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf
 RUN gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 RUN curl -sSL https://get.rvm.io | bash -s stable
 RUN /bin/bash -l -c ". /etc/profile.d/rvm.sh && rvm install 2.6.5"
+
+# RUN /bin/bash -l -c "gem install travis"
+RUN /bin/bash -l -c "gem install bundler -v 2.1.4"
+# RUN bundle install --gemfile ~/.travis/travis-build/Gemfile
+# RUN bundler binstubs travis
 
 # RUN /bin/bash -l -c "rvm requirements"
 # RUN /bin/bash -l -c "rvm install 2.6.5"
