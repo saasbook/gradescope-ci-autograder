@@ -41,8 +41,8 @@ end
 standard_steps = [
   'export RAILS_ENV=test',
   'rm -rf .bundle/ vendor/bundle/',
-  'bundle install --without production',
-  'yarn install',
+  'bundle config set without production && bundle install',
+  'yarn install --ignore platform --ignore engines',
   'bundle exec rake db:setup',
   'bundle exec rspec spec/',
   'bundle exec cucumber'
