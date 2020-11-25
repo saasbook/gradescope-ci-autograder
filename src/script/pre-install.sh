@@ -1,5 +1,7 @@
-bash -c 'BASH_ENV=/etc/profile exec bash'
-/bin/bash --login
+# bash -c 'BASH_ENV=/etc/profile exec bash'
+# /bin/bash --login
+
+echo "Pre Install Script"
 rvm install 2.6.5
 rvm use 2.6.5
 
