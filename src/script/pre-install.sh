@@ -2,7 +2,8 @@
 # /bin/bash --login
 
 echo "Pre Install Script"
-rvm install 2.6.5
-rvm use 2.6.5
+/bin/bash -l -c ". /etc/profile.d/rvm.sh && rvm use 2.6.5"
+
+# rvm use 2.6.5
 
 # rbenv install 2.6.5

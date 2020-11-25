@@ -9,7 +9,9 @@ git clone --depth=1 --branch=master https://github.com/saasbook/gradescope-ci-au
 gradescope-ci-autograder/src/script/pre-install.sh
 
 mkdir -p src/results/
-ruby src/script/autograder.rb submission/ > results/results.json
+
+ruby -v
+ruby gradescope-ci-autograder/src/script/autograder.rb submission/ > results/results.json
 # cp src/results/results.json results/
 
 # rm -rf gradescope-ci-autograder/
