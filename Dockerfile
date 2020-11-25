@@ -4,7 +4,7 @@ FROM gradescope/auto-builds:latest
 
 # A bunch of Ubuntu deps
 RUN apt-add-repository -y ppa:rael-gc/rvm
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update
 RUN apt-get install software-properties-common
@@ -18,8 +18,9 @@ RUN apt-get install -y ruby
 
 RUN echo 'gem: --no-document' >> /etc/gemrc
 
+RUN gem update --system
 RUN gem install travis
-RUN gem install bundler
+RUN gem install bundler -v 2.1.4
 # RUN bundle install --gemfile ~/.travis/travis-build/Gemfile
 # RUN bundler binstubs travis
 
