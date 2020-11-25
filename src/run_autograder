@@ -10,8 +10,12 @@ gradescope-ci-autograder/src/script/pre-install.sh
 
 # mkdir -p src/results/
 
+echo "System Ruby"
 ruby -v
-ruby gradescope-ci-autograder/src/script/autograder.rb submission/ $PWD/results/results.json
+echo "/bin/bash -l -c version of ruby:"
+/bin/bash -l -c "ruby -v"
+
+/bin/bash -l -c "ruby gradescope-ci-autograder/src/script/autograder.rb $PWD/submission/ $PWD/results/results.json"
 # cp src/results/results.json results/
 
 # rm -rf gradescope-ci-autograder/
