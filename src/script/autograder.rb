@@ -6,7 +6,7 @@ require 'json'
 
 puts "ARGS #{ARGV}"
 RESULTS = { output: '', stdout_visibility: 'visible' }
-# RESULTS_FILEPATH = 'results/results.json'
+RESULTS_FILEPATH = ARGV[0]
 
 stdout, stderr, status = Open3.capture3("ls")
 
@@ -15,6 +15,10 @@ RESULTS[:output] << "STDERR LS:\n\n#{stderr}\n#{'=' * 20}\n\n"
 RESULTS[:output] << "STATUS LS:\n\n#{status}\n#{'=' * 20}\n\n"
 
 puts RESULTS.to_json
+
+File.open(RESULTS_FILEPATH,"w") do |f|
+  f.write(RESULTS.to_json)
+end
 
 class TravisConfigRunner
   TRAVIS_FILE_NAME = '.travis.yml'

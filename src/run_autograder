@@ -11,7 +11,7 @@ gradescope-ci-autograder/src/script/pre-install.sh
 mkdir -p src/results/
 
 ruby -v
-ruby gradescope-ci-autograder/src/script/autograder.rb submission/ > results/results.json
+ruby gradescope-ci-autograder/src/script/autograder.rb submission/ $PWD/results/results.json
 # cp src/results/results.json results/
 
 # rm -rf gradescope-ci-autograder/
