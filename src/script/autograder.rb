@@ -5,7 +5,17 @@ require 'open3'
 require 'json'
 
 puts "ARGS #{ARGV}"
-RESULTS = { output: '', stdout_visibility: 'visible' }
+RESULTS = {
+  output: '',
+  stdout_visibility: 'visible',
+  score: 0,
+  tests: [
+    score: 0,
+    name: "There are actual tests here...",
+    output: "Please use the standard output section"
+  ]
+}
+
 RESULTS_FILEPATH = ARGV[1]
 
 stdout, stderr, status = Open3.capture3("ls")
