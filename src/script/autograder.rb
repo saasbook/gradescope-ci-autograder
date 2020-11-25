@@ -6,7 +6,7 @@ require 'json'
 
 puts "ARGS #{ARGV}"
 RESULTS = {
-  output: '',
+  output: '<h2>CI Results</h2>',
   stdout_visibility: 'visible',
   score: 0,
   tests: [
@@ -18,13 +18,38 @@ RESULTS = {
 
 RESULTS_FILEPATH = ARGV[1]
 
-stdout, stderr, status = Open3.capture3("ls")
+def simple_details(summary, code)
+  <<~HTML
+    <details>
+      <summary>#{summary}</summary>
+      <pre>#{code}</pre>
+    </details>
+  HTML
+end
 
-RESULTS[:output] << "STDOUT LS:\n\n#{stdout}\n#{'=' * 20}\n\n"
-RESULTS[:output] << "STDERR LS:\n\n#{stderr}\n#{'=' * 20}\n\n"
-RESULTS[:output] << "STATUS LS:\n\n#{status}\n#{'=' * 20}\n\n"
+def format_output(index, cmd, stdout, stderr, status_code)
+  <<~HTML
+    <details>
+      <summary><h3>#{index}: <code>#{cmd}</code></h3></summary>
+      #{simple_details('Standard Output', stdout) if stdout}
+      #{simple_details('Standard Error', stderr) if stderr}
+      <strong>The command #{cmd} exited with status: #{status_code}</strong>
+    </details>
+  HTML
+end
 
-puts RESULTS.to_json
+standard_steps = [
+  'export RAILS_ENV=test',
+  'bundle install --without production',
+  'yarn install',
+  'bundle exec rake db:setup',
+  'bundle exec rspec spec/',
+  'bundle exec cucumber'
+].each_with_index do |cmd, index|
+  stdout, stderr, status_code = Open3.capture3(cmd, chdir: ARGV[0])
+  RESULTS[:output] << format_output(index, cmd, stdout, stderr, status_code)
+end
+
 
 File.open(RESULTS_FILEPATH,"w") do |f|
   f.write(RESULTS.to_json)
@@ -34,7 +59,9 @@ class TravisConfigRunner
   TRAVIS_FILE_NAME = '.travis.yml'
   def init
     if self.config_file_present?
+      load_file
     else
+      set_default_rails_steps
     end
   end
 
@@ -65,7 +92,7 @@ class TravisConfigRunner
   end
 
   def config_file_present?
-
+    false
   end
 
   def exec_travis_step(step)
