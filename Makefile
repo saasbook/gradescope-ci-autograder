@@ -36,6 +36,16 @@ localenv: $(FILES)
 	cp -R spec autograder/source/
 	cp $(SOLUTIONS) autograder/submission/
 
+.PHONE: docker build push
+docker: build push
+	gradescope build -c 208804 -a 868305 -i cycomachead/gradescope-ci:latest
+
+build:
+	docker build . -t cycomachead/gradescope-ci:latest
+
+push:
+	docker push cycomachead/gradescope-ci:latest
+
 .PHONY: clean
 clean:
 	-rm -rf autograder $(NAME).zip

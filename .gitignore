@@ -8,3 +8,6 @@ examples/
 Archive.zip
 assignment.zip
 autograder/
+
+# Ignore self, if we becomes a submodule.
+gradescope-ci-autograder/
