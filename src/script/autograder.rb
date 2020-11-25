@@ -6,7 +6,7 @@ require 'json'
 
 puts "ARGS #{ARGV}"
 RESULTS = { output: '', stdout_visibility: 'visible' }
-RESULTS_FILEPATH = ARGV[0]
+RESULTS_FILEPATH = ARGV[1]
 
 stdout, stderr, status = Open3.capture3("ls")
 
