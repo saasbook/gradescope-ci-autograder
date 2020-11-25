@@ -46,7 +46,11 @@ standard_steps = [
   'bundle exec rspec spec/',
   'bundle exec cucumber'
 ].each_with_index do |cmd, index|
-  stdout, stderr, status_code = Open3.capture3(cmd, chdir: ARGV[0])
+  begin
+    stdout, stderr, status_code = Open3.capture3("/bin/bash -l -c \"#{cmd}\"", chdir: ARGV[0])
+  rescue err
+    RESULTS[:output] << simple_details("An Error Occured: #{cmd}", err)
+  end
   RESULTS[:output] << format_output(index, cmd, stdout, stderr, status_code)
 end
 

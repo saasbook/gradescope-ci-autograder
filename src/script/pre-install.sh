@@ -11,4 +11,4 @@ ruby -v
 git clone https://github.com/travis-ci/travis-build
 cd travis-build
 mkdir -p ~/.travis
-ln -s $PWD ~/.travis/travis-build
+# ln -s $PWD ~/.travis/travis-build
