@@ -17,12 +17,46 @@ RESULTS = {
 }
 
 RESULTS_FILEPATH = ARGV[1]
+COLOR_MAP =   { 1 => :nothing,
+  2 => :nothing,
+  4 => :nothing,
+  5 => :nothing,
+  7 => :nothing,
+  30 => :black,
+  31 => :red,
+  32 => :green,
+  33 => :yellow,
+  34 => :blue,
+  35 => :magenta,
+  36 => :cyan,
+  37 => :white,
+  40 => :nothing,
+  41 => :nothing,
+  43 => :nothing,
+  44 => :nothing,
+  45 => :nothing,
+  46 => :nothing,
+  47 => :nothing,
+}.freeze
+
+def escape_ansi_to_html(data)
+  COLOR_MAP.each do |key, value|
+    if value != :nothing
+      data.gsub!(/\e\[#{key}m/,"<span style=\"color:#{value}\">")
+    else
+      data.gsub!(/\e\[#{key}m/,"<span>")
+    end
+  end
+  data.gsub!(/\e\[0m/,'</span>')
+  data
+end
+
 
 def simple_details(summary, code)
   <<~HTML
     <details>
       <summary>#{summary}</summary>
-      <pre>#{code}</pre>
+      <pre>#{escape_ansi_to_html(code)}</pre>
     </details>
   HTML
 end
@@ -31,8 +65,8 @@ def format_output(index, cmd, stdout, stderr, status_code)
   <<~HTML
     <details>
       <summary><h3>#{index}: <code>#{cmd}</code></h3></summary>
-      #{simple_details('Standard Output', stdout) if stdout}
-      #{simple_details('Standard Error', stderr) if stderr}
+      #{simple_details('Standard Output', escape_ansi_to_html(stdout)) if stdout}
+      #{simple_details('Standard Error', escape_ansi_to_html(stderr)) if stderr}
       <strong>The command #{cmd} exited with status: #{status_code}</strong>
     </details>
   HTML
