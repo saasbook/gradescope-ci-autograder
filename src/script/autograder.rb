@@ -54,22 +54,32 @@ end
 
 def simple_details(summary, code)
   <<~HTML
-    <details>
-      <summary>#{summary}</summary>
-      <pre>#{escape_ansi_to_html(code)}</pre>
-    </details>
+    <p>#{summary}</p>
+    <pre>#{escape_ansi_to_html(code)}</pre>
   HTML
+  # <<~HTML
+  #   <details>
+  #     <summary>#{summary}</summary>
+  #     <pre>#{escape_ansi_to_html(code)}</pre>
+  #   </details>
+  # HTML
 end
 
 def format_output(index, cmd, stdout, stderr, status_code)
   <<~HTML
-    <details>
-      <summary><h3>#{index}: <code>#{cmd}</code></h3></summary>
-      #{simple_details('Standard Output', escape_ansi_to_html(stdout)) if stdout}
-      #{simple_details('Standard Error', escape_ansi_to_html(stderr)) if stderr}
-      <strong>The command #{cmd} exited with status: #{status_code}</strong>
-    </details>
+    <h3>#{index}: <code>#{cmd}</code></h3>
+    #{simple_details('Standard Output', stdout) if stdout.strip!}
+    #{simple_details('Standard Error', stderr) if stderr.strip!}
+    <strong>The command #{cmd} exited with status: #{status_code}</strong><hr>
   HTML
+  # <<~HTML
+  #   <details>
+  #     <summary><h3>#{index}: <code>#{cmd}</code></h3></summary>
+  #     #{simple_details('Standard Output', stdout) if stdout.strip!}
+  #     #{simple_details('Standard Error', stderr) if stderr.strip!}
+  #     <strong>The command #{cmd} exited with status: #{status_code}</strong>
+  #   </details>
+  # HTML
 end
 
 standard_steps = [
@@ -86,7 +96,11 @@ standard_steps = [
   rescue err
     RESULTS[:output] << simple_details("An Error Occured: #{cmd}", err)
   end
-  RESULTS[:output] << format_output(index, cmd, stdout, stderr, status_code)
+  if index < 5 && status_code == 0
+    RESULTS[:output] << format_output(index, cmd, '(successful output truncated)', '', status_code)
+  else
+    RESULTS[:output] << format_output(index, cmd, stdout, stderr, status_code)
+  end
 end
 
 
